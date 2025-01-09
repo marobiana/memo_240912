@@ -7,7 +7,7 @@
   <th:block layout:fragment="content">
     <section class="contents d-flex justify-content-center" >
       <div class="w-50 my-4">
-        <h1 class="mb-4">회원가입</h1>
+        <h1 class="mb-4">회원가입111</h1>
         <form id="signUpForm" method="post" action="/user/sign-up">
           <table class="sign-up-table table table-bordered">
             <tr>
@@ -48,5 +48,50 @@
         </form>
       </div>
     </section>
+
+    <script>
+      $(function() {
+        // 중복확인
+        $("#loginIdCheckBtn").on("click", function() {
+          // 문구 초기화
+          $("#idCheckLength").addClass("d-none");
+          $("#idCheckDuplicated").addClass("d-none");
+          $("#idCheckOk").addClass("d-none");
+
+          //alert("중복확인");
+
+          let loginId = $("input[name=loginId]").val().trim();
+          console.log(loginId);
+
+          if (loginId.length < 4) {
+            $("#idCheckLength").removeClass("d-none");
+            return;
+          }
+
+          $.ajax({
+            // request
+            // type 생략 시 get 요청
+            url:"/user/is-duplicate-id"
+            , data:{"loginId":loginId}
+
+            // response
+            , success:function(data) {
+              if (data.code == 200) {
+                if (data.is_duplicate_id) { // 중복
+                  $("#idCheckDuplicated").removeClass("d-none");
+                } else { // 사용 가능
+                  $("#idCheckOk").removeClass("d-none");
+                }
+              } else {
+                alert(data.error_message);
+              }
+            }
+            , error:function(e) {
+              alert("중복확인에 실패했습니다.");
+            }
+          });
+        });
+      });
+    </script>
   </th:block>
 </html>
