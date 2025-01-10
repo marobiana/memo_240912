@@ -7,7 +7,7 @@
   <th:block layout:fragment="content">
     <section class="contents d-flex justify-content-center" >
       <div class="w-50 my-4">
-        <h1 class="mb-4">회원가입111</h1>
+        <h1 class="mb-4">회원가입</h1>
         <form id="signUpForm" method="post" action="/user/sign-up">
           <table class="sign-up-table table table-bordered">
             <tr>
@@ -51,7 +51,7 @@
 
     <script>
       $(function() {
-        // 중복확인
+        // 아이디 중복확인
         $("#loginIdCheckBtn").on("click", function() {
           // 문구 초기화
           $("#idCheckLength").addClass("d-none");
