@@ -3,6 +3,7 @@ package com.memo.post;
 import com.memo.post.bo.PostBO;
 import com.memo.post.domain.Post;
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,5 +35,10 @@ public class PostController {
         model.addAttribute("postList", postList);
 
         return "post/postList";
+    }
+
+    @GetMapping("/post-create-view")
+    public String postCreateView() {
+        return "post/postCreate";
     }
 }
