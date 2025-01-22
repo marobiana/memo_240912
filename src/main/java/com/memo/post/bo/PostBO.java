@@ -71,9 +71,18 @@ public class PostBO {
         // 파일 존재 시 이미지 업로드
         String imagePath = null;
         if (file != null) {
+            // 새이미지 업로드
+            imagePath = fileManager.uploadFile(file, userLoginId);
 
+            // imagePath가 있으면(성공) 이고, 기존이미지 있다면 기존이미지를 삭제
+            if (imagePath != null && post.getImagePath() != null) {
+                // 폴더와 이미지 삭제(컴퓨터 서버에 있는)
+                fileManager.deleteFile(post.getImagePath());
+            }
         }
 
         // DB update
+        // imagePath는 null이거나 있다. 분기는 mapper 쿼리에서
+        postMapper.updatePostById(postId, subject, content, imagePath);
     }
 }

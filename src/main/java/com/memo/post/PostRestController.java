@@ -56,7 +56,7 @@ public class PostRestController {
             @RequestParam("postId") int postId,
             @RequestParam("subject") String subject,
             @RequestParam("content") String content,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "file", required = false) MultipartFile file,
             HttpSession session
     ) {
         // 세션 => userId(테이블), userLoginId(폴더)
