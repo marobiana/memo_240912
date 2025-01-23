@@ -85,4 +85,21 @@ public class PostBO {
         // imagePath는 null이거나 있다. 분기는 mapper 쿼리에서
         postMapper.updatePostById(postId, subject, content, imagePath);
     }
+
+    public void deletePostByPostIdUserId(int postId, int userId) {
+        // 기존글 가져오기
+        Post post = postMapper.selectPostByPostIdUserId(postId, userId);
+        if (post == null) {
+            log.warn("[글삭제] post is null. postId:{}, userId:{}", postId, userId);
+            return;
+        }
+
+        // 이미지가 있었으면 제거
+        if (post.getImagePath() != null) {
+            fileManager.deleteFile(post.getImagePath());
+        }
+
+        // DB delete
+        postMapper.deletePostById(postId);
+    }
 }
