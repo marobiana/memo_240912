@@ -20,6 +20,7 @@ public class PostBO {
 
     private final PostMapper postMapper;
     private final FileManagerService fileManager;
+    private final static int POST_MAX_SIZE = 3;
     //private Logger log = LoggerFactory.getLogger(PostBO.class);
     //private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -30,10 +31,27 @@ public class PostBO {
 //        this.userBO = userBO;
 //    }
 
-    // i: userId
+    // i: userId, prevId, nextId
     // o: List<Post>
-    public List<Post> getPostListByUserId(int userId) {
-        return postMapper.selectPostListByUserId(userId);
+    public List<Post> getPostListByUserId(int userId, Integer prevId, Integer nextId) {
+        // 게시글 번호: 10 9 8 | 7 6 5 | 4 3 2 | 1
+        // 만약 4 3 2 페이지에 있을 때
+        // 1) 페이징 없음(next, prev 없음): 최신순 3개 desc
+        // 2) 다음(next 있음): 2보다 작은 것 3개 desc
+        // 3) 이전(prev 있음): 4보다 큰 것 3개 asc => 5 6 7 => reverse list  7 6 5
+        Integer standardId = null; // 기준 postId(prev or next)
+        String direction = null; // 방향
+
+        if (prevId != null) {  // 3) 이전
+            standardId = prevId;
+            direction = "prev";
+        } else if (nextId != null) { // 2) 다음
+            standardId = nextId;
+            direction = "next";
+        }
+
+        // 1) 페이징 없음
+        return postMapper.selectPostListByUserId(userId, direction, standardId, POST_MAX_SIZE);
     }
 
     // i: postId, userId

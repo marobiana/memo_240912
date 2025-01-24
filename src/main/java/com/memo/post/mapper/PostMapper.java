@@ -11,7 +11,11 @@ import java.util.Map;
 public interface PostMapper {
     public List<Map<String, Object>> selectPostListTest();
 
-    public List<Post> selectPostListByUserId(int userId);
+    public List<Post> selectPostListByUserId(
+            @Param("userId") int userId,
+            @Param("direction") String direction,
+            @Param("standardId") Integer standardId,
+            @Param("limit") int limit);
 
     public Post selectPostByPostIdUserId(
             @Param("postId") int postId,
