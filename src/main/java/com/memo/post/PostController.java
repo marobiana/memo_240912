@@ -41,6 +41,18 @@ public class PostController {
         if (postList.isEmpty() == false) { // postList가 비어있지 않을 때 페이징 정보 채움
             prevId = postList.get(0).getId(); // 첫번째칸 postId
             nextId = postList.get(postList.size() - 1).getId(); // 마지막칸 postId
+
+            // 이전이 없나? 그렇다면 0
+            // 유저가 쓴 글들 중 제일 큰 숫자가 prevId와 같으면 이전 없음
+            if (postBO.isPrevLastPageByUserId(userId, prevId)) {
+                prevId = 0;
+            }
+
+            // 다음이 없나? 그렇다면 0
+            // 유저가 쓴 글들 중 제일 작은 숫자가 nextId와 같으면 다음 없음
+            if (postBO.isNextLastPageByUserId(userId, nextId)) {
+                nextId = 0;
+            }
         }
 
         // 모델에 담기

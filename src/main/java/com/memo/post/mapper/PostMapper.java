@@ -17,6 +17,11 @@ public interface PostMapper {
             @Param("standardId") Integer standardId,
             @Param("limit") int limit);
 
+    public int selectPostIdByUserIdAsSort(
+            @Param("userId") int userId,
+            @Param("sort") String sort
+    );
+
     public Post selectPostByPostIdUserId(
             @Param("postId") int postId,
             @Param("userId") int userId);

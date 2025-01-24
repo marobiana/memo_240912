@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -45,13 +46,33 @@ public class PostBO {
         if (prevId != null) {  // 3) 이전
             standardId = prevId;
             direction = "prev";
+
+            // 예) [5 6 7]
+            List<Post> postList = postMapper.selectPostListByUserId(userId, direction, standardId, POST_MAX_SIZE);
+
+            // reverse list
+            Collections.reverse(postList);
+
+            return postList;
         } else if (nextId != null) { // 2) 다음
             standardId = nextId;
             direction = "next";
         }
 
-        // 1) 페이징 없음
+        // 1) 페이징 없음, 2) 다음
         return postMapper.selectPostListByUserId(userId, direction, standardId, POST_MAX_SIZE);
+    }
+
+    // 이전 없나?
+    public boolean isPrevLastPageByUserId(int userId, int prevId) {
+        int maxPostId = postMapper.selectPostIdByUserIdAsSort(userId, "desc");
+        return maxPostId == prevId; // true: 마지막
+    }
+
+    // 다음 없나?
+    public boolean isNextLastPageByUserId(int userId, int nextId) {
+        int minPostId = postMapper.selectPostIdByUserIdAsSort(userId, "asc");
+        return minPostId == nextId; // true: 마지막
     }
 
     // i: postId, userId
