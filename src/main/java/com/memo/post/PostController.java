@@ -1,5 +1,6 @@
 package com.memo.post;
 
+import com.memo.aop.TimeTrace;
 import com.memo.post.bo.PostBO;
 import com.memo.post.domain.Post;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ public class PostController {
 
     private final PostBO postBO;
 
+    @TimeTrace
     @GetMapping("/post-list-view")
     public String postListView(
             @RequestParam(value = "prevId", required = false) Integer prevIdParam,
